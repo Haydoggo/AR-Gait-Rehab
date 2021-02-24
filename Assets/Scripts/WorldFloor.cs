@@ -90,7 +90,7 @@ public class WorldFloor : MonoBehaviour
         }
         else
         {
-            observer.DisplayOption = SpatialAwarenessMeshDisplayOptions.None;
+            observer.DisplayOption = SpatialAwarenessMeshDisplayOptions.Occlusion;
         }
     }
 

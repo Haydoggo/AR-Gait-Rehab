@@ -5,6 +5,7 @@ using UnityEngine.Events;
 using UnityEngine;
 public class PathController : MonoBehaviour
 {
+    public Transform pathLayingTransform;
     public Path path;
     public Material lineMaterial;
     public float nodeSpacing;
@@ -103,7 +104,7 @@ public class PathController : MonoBehaviour
 
     public List<StrideLengthPair> strideLengthPairs = new List<StrideLengthPair>();
 
-    private bool layingTrack = false;
+    public bool LayingTrack { get; set; } = false;
     private LineRenderer line;
     private bool pathVisible = false;
     private Transform selectedNode = null;
@@ -122,13 +123,13 @@ public class PathController : MonoBehaviour
 
     void Update()
     {
-        if (layingTrack)
+        if (LayingTrack)
         {
-            Vector3 dist = Camera.main.transform.position - path.lastNode.position;
+            Vector3 dist = pathLayingTransform.position - path.lastNode.position;
             float flatDist = new Vector2(dist.x, dist.z).magnitude;
             if (flatDist >= nodeSpacing)
             {
-                Vector3 pos = Camera.main.transform.position;
+                Vector3 pos = pathLayingTransform.position;
                 pos.y = path.transform.position.y;
                 PlaceNode(pos);
                 UpdatePath();
@@ -191,8 +192,8 @@ public class PathController : MonoBehaviour
     public void StartTrack()
     {
         ClearTrack();
-        layingTrack = true;
-        Vector3 pos = Camera.main.transform.position;
+        LayingTrack = true;
+        Vector3 pos = pathLayingTransform.position;
         pos.y = path.transform.position.y;
         PlaceNode(pos);
         UpdatePath();
@@ -215,7 +216,7 @@ public class PathController : MonoBehaviour
 
     public void EndTrack()
     {
-        layingTrack = false;
+        LayingTrack = false;
     }
     public void GenerateFootprints()
     {
