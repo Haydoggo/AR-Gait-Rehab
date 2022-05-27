@@ -12,6 +12,8 @@ namespace Utility
     public class Utility : MonoBehaviour
     {
 
+        public GameObject menu;
+
         public void ToggleItem(GameObject item)
         {
             item.SetActive(!item.activeSelf);
@@ -43,5 +45,4 @@ namespace Utility
             Destroy(gameObject);
         }
     }
-
 }

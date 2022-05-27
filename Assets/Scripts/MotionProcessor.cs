@@ -120,7 +120,8 @@ public class MotionProcessor : MonoBehaviour
             bufferOfInterestIndex = 0;
         }
         bufferOfInterest = allBuffers[bufferOfInterestIndex];
-        label.UpdateText(bufferNames[bufferOfInterestIndex]);
+        if (label)
+            label.UpdateText(bufferNames[bufferOfInterestIndex]);
     }
 
     public void toggleAbsoluteReadings()

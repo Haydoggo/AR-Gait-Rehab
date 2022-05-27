@@ -24,9 +24,9 @@ public class PathController : MonoBehaviour
     public UnityEvent onFootprintsUpdated = new UnityEvent();
 
     private List<GameObject> directionIndicators = new List<GameObject>();
-    private int direction = 1;
+    public int Direction { get; set; } = 1;
 
-    private StrideLengthPair currentStrideLengths = new StrideLengthPair(0, 0);
+    private StrideLengthPair currentStrideLengths = new StrideLengthPair(0.5f, 0.5f);
 
     private float leftStrideLength;
     private float rightStrideLength;
@@ -79,7 +79,7 @@ public class PathController : MonoBehaviour
         }
     }
 
-    private float strideWidth;
+    private float strideWidth = 0.2f;
     public float StrideWidth
     {
         set
@@ -108,7 +108,7 @@ public class PathController : MonoBehaviour
     private LineRenderer line;
     private bool pathVisible = false;
     private Transform selectedNode = null;
-    void Start()
+    void OnEnable()
     {
         anchorStoreManager = FindObjectOfType<AnchorStoreManager>();
         //anchorStoreManager.onAnchorStoreInitialised.AddListener(LoadPath);
@@ -329,7 +329,7 @@ public class PathController : MonoBehaviour
         HighlightKeyNodes();
     }
 
-    Transform PlaceNode(Vector3 pos)
+    public Transform PlaceNode(Vector3 pos)
     {
         if (strideLengthPairs.Count > 0)
         {
@@ -349,7 +349,7 @@ public class PathController : MonoBehaviour
         UpdatePath();
     }
 
-    void UpdatePath()
+    public void UpdatePath()
     {
         path.UpdateCurves();
         if (path.nodes.Count > 1)
@@ -363,13 +363,11 @@ public class PathController : MonoBehaviour
         }
         GenerateFootprints();
         HighlightKeyNodes();
-        //GetComponent<AudioSource>().Play();
     }
 
     public void SetPathVisible(bool isVisible)
     {
         pathVisible = isVisible;
-        //line.enabled = isVisible;
         Color color = line.material.color;
         color.a = isVisible ? 1f : 0.2f;
         line.material.color = color;
@@ -386,7 +384,7 @@ public class PathController : MonoBehaviour
 
     public void ChangePathDirection()
     {
-        direction *= -1;
+        Direction *= -1;
         for (int i =0; i < strideLengthPairs.Count; i++)
         {
             float oldLeft = strideLengthPairs[i].left;
@@ -400,17 +398,17 @@ public class PathController : MonoBehaviour
         directionIndicators.Clear();
         for(float d = 0; d < path.bakedLength; d += 0.5f)
         {
-            GameObject indicator = Instantiate(directionIndicatorPrefab);
-            directionIndicators.Add(indicator);
+            PathFollower indicator = Instantiate(directionIndicatorPrefab).GetComponent<PathFollower>();
+            directionIndicators.Add(indicator.gameObject);
             indicator.GetComponent<PathFollower>().path = path;
             indicator.GetComponent<PathFollower>().distAlong = d;
-            indicator.GetComponent<PathFollower>().travelSpeed *= direction;
+            indicator.GetComponent<PathFollower>().travelSpeed *= Direction;
         }
         StopAllCoroutines();
-        StartCoroutine(fadeIndicators(1f));
+        StartCoroutine(FadeIndicators(1f));
     }
 
-    IEnumerator fadeIndicators(float fadeTime)
+    IEnumerator FadeIndicators(float fadeTime)
     {
         for(float t = 0; t < fadeTime; t += Time.deltaTime)
         {

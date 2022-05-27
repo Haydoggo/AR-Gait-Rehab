@@ -7,7 +7,7 @@ using UnityEngine.Events;
 public class WorldFloor : MonoBehaviour
 {
     public Utility.FloatEvent onFloorHeightFound;
-
+    public static WorldFloor instance;
     bool observersEnabled = true;
     bool meshVisible = true;
     [HideInInspector]
@@ -15,6 +15,11 @@ public class WorldFloor : MonoBehaviour
 
     public IMixedRealitySpatialAwarenessSystem spatialAwarenessSystem;
     IMixedRealitySpatialAwarenessMeshObserver observer;
+
+    private void Awake()
+    {
+        instance = this;
+    }
     public void Start()
     {
         spatialAwarenessSystem = CoreServices.SpatialAwarenessSystem;

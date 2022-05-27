@@ -13,8 +13,8 @@ public class RhythmGenerator : MonoBehaviour
 
     public float BeatPeriod
     {
-        get { return beatPeriod; }
-        set { beatPeriod = value; }
+        get => beatPeriod;
+        set => beatPeriod = value;
     }
 
     public float BeatFrequency
@@ -24,11 +24,6 @@ public class RhythmGenerator : MonoBehaviour
     }
 
     private float timeSinceBeat;
-
-    private void Awake()
-    {
-        //getComp
-    }
 
     void Update()
     {

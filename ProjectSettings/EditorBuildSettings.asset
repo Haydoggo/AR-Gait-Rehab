@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TimedGaitRecognition.unity
     guid: 21cfa2838415b3e4ab26b77e7c5d445e
+  - enabled: 0
+    path: Assets/Scenes/Evaluation.unity
+    guid: 1041261dd545658498d5210b912485c8
   m_configObjects:
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: 4c9bdc5321417fa408a9e7caf758c362,
       type: 2}

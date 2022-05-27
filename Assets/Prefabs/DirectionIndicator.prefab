@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   path: {fileID: 0}
-  travelSpeed: -1.48
+  travelSpeed: 1.5
   distAlong: 0
 --- !u!114 &142883107094710150
 MonoBehaviour:
@@ -61,6 +61,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifetime: 4.19
+  OnDestroy:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7419040906928837199
 GameObject:
   m_ObjectHideFlags: 0

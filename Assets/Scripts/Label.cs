@@ -5,6 +5,7 @@ public class Label : MonoBehaviour
 {
     public string title = "Value";
     public string format = "F2";
+    public string units = "";
     public void UpdateText(float value)
     {
         GetComponent<TextMeshPro>().text = string.Format("{0}: {1:" + format + "}", title, value);
@@ -21,6 +22,6 @@ public class Label : MonoBehaviour
     }
     public void UpdateText(string text)
     {
-        GetComponent<TextMeshPro>().text = $"{title}: {text}";
+        GetComponent<TextMeshPro>().text = $"{title}: {text}{units}";
     }
 }

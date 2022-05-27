@@ -26,18 +26,32 @@ public class GaitAnalyser : MonoBehaviour
     public float LowerThreshold { get; set; } = 0f;
 
     public int StepsTaken { get; set; } = 0;
-
     public float StepCombo { get; set; } = 0;
+    public float ErrorStdDeviation { get; set; } = 0;
+    public float MeasuredStrideLength { get; set; } = 0;
+    public float MeasuredStridePeriod { get; set; } = 0;
 
     private bool readyForStep = true;
-    private float lastStepTime;
+    public float LastStepTime { get; set; }
     private Vector3 lastStepPosition;
     private float lastBeatTime;
-    private List<float> timeErrorBuffer = new List<float>();
+    private readonly List<float> timeErrorBuffer = new List<float>();
 
+    public float TimeError
+    {
+        get
+        {
+            if (timeErrorBuffer.Count > 0)
+                return timeErrorBuffer[0];
+            else
+                return 0;
+        }
+        set { }
+    }
     public void Awake()
     {
         lastBeatTime = Time.time;
+        LastStepTime = Time.time;
         lastStepPosition = motionProcessor.trackingTransform.position;
     }
 
@@ -80,11 +94,11 @@ public class GaitAnalyser : MonoBehaviour
 
         if (_sufficientVelocity && _sufficientAccelDelta)
         {
-            if (Time.time - lastStepTime >= minStepTime)
+            if (Time.time - LastStepTime >= minStepTime)
             {
-                onStepDetected.Invoke();
                 RegisterStep();
-                lastStepTime = Time.time;
+                onStepDetected.Invoke();
+                LastStepTime = Time.time;
             }
         }
 
@@ -103,8 +117,9 @@ public class GaitAnalyser : MonoBehaviour
         Vector3 stepPosition = motionProcessor.trackingTransform.position;
         Vector3 stride = stepPosition - lastStepPosition;
 
-        float measuredStrideLength = new Vector2(stride.x, stride.z).magnitude;
-        lastStepTime = Time.time;
+        MeasuredStrideLength = new Vector2(stride.x, stride.z).magnitude;
+        MeasuredStridePeriod = Time.time - LastStepTime;
+        LastStepTime = Time.time;
         lastStepPosition = stepPosition;
         float timeError = Time.time - lastBeatTime;
         if (timeError > rhythmGenerator.BeatPeriod / 2)
@@ -130,9 +145,9 @@ public class GaitAnalyser : MonoBehaviour
                 errorVariance += Mathf.Pow(val - meanError, 2);
             }
             errorVariance /= timeErrorBuffer.Count;
-            float errorStdDeviation = Mathf.Sqrt(errorVariance);
+            ErrorStdDeviation = Mathf.Sqrt(errorVariance);
 
-            if (errorVariance < 0.0015)
+            if (ErrorStdDeviation < 0.05)
             {
                 StepCombo++;
             }

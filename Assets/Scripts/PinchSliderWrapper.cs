@@ -10,6 +10,7 @@ public class PinchSliderWrapper : MonoBehaviour
     public float startingValue = 0.5f;
     public float exponent = 1f;
     public bool rounded = false;
+    public float roundTo = 1f;
 
     private float lastVal = 0f;
     private PinchSlider pinchSlider;
@@ -43,7 +44,7 @@ public class PinchSliderWrapper : MonoBehaviour
         newValRaised = newValRaised * Mathf.Sign(newVal);
         if (rounded)
         {
-            newValRaised = Mathf.Round(newValRaised);
+            newValRaised = Mathf.Round(newValRaised/roundTo)*roundTo;
             if (newValRaised != lastVal)
             {
                 OnValueUpdated.Invoke(newValRaised);
